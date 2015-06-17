@@ -1,0 +1,16 @@
+{
+  "name": "Sweep-Stats",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+      "start": "node ./server.js"
+    },
+  "dependencies": {
+      "body-parser": "^1.12.4",
+      "express": "^4.12.4",
+      "gulp": "^3.8.11",
+      "gulp-nodemon": "^2.0.3",
+      "jsonwebtoken": "^5.0.1",
+      "mongoose": "^4.0.3"
+    }
+}
