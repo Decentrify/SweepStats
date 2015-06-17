@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var app = express();
+var indexRoute = require('./server/routes/indexRoute');
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,10 +17,8 @@ app.use(function(req, res, next){
     next();
 });
 
+app.use('/', indexRoute);
 
-app.get("/", function(req, res){
-	res.send('Hello World ..!');
-})
 
 
 var port = process.env.PORT || 5000;
