@@ -17,7 +17,10 @@
         };
         
         var cookieData = $cookies.getObject('data'); // Look in the cookie store for the value.
+        var metadata = $cookies.getObject('metadata');
+        
         self.data = cookieData != null ? cookieData : testData;
+        self.metadata = metadata != null ? metadata : {};
 	}
 
 

@@ -11,6 +11,7 @@
         
 		$log.debug('Main Controller Initialized');
         $cookies.remove('data');
+        $cookies.remove('metadata');
 	}
 
 

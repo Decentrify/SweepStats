@@ -26,14 +26,25 @@
 							data: loadEvent.target.result
 						};
 						
-						var result = analyzeData(csv.data);
+						var result = analyzeDataAdvanced(csv.data);
                         console.log(result);
                         
                         if(result != null && !(result.length == 0)){
                             
-                            $cookies.putObject('data', result);
-                            console.log("Going to change the path");
                             
+                            var metadata = {
+                                
+                                overlay : 'gradient',
+                                gradientShuffle: 3000,
+                                croupierShuffle: 3000,
+                                maxExchangeCount: 25,
+                                controlPull: 3000,
+                                indexPull: 4000
+                            };
+                            
+                            $cookies.putObject('data', result);
+                            $cookies.putObject('metadata', metadata);
+
                             scope.$apply(function(){
                                 $location.path("/charts");  // Redirect to the display one.
                             });
@@ -163,7 +174,7 @@
 
 			},
 
-			template: '<div id="container" style="margin 0 auto; width: 500px" > Not Working </div>'
+			template: '<div id="container" style="margin 0 auto; width: 500px" class="medium-top-buffer"> Not Working </div>'
 		}		
 	}
 
@@ -194,4 +205,42 @@
 		return result;
 	}
 
+
+
+
+    function analyzeDataAdvanced(data){
+
+        console.log(" Advanced Analysis of Data, start Time line from 0");
+        
+        var csvArray = data.split("\n");
+
+        var lineArray = [];
+
+        var result = {
+
+            fiftyArray : [],
+            seventyFiveArray : [],
+            ninetyArray : []
+        };
+        
+        var first = true;
+        for(var i =0, len= csvArray.length; i < len ; i ++){
+            
+            lineArray = csvArray[i].split(",");
+            
+            if(first){
+                var baseTime = ( parseInt(lineArray[2])/1000 -1 );
+                first = false;
+            }
+            result.fiftyArray.push([ (parseInt(lineArray[2], 10)/1000 - baseTime), parseInt(lineArray[5], 10)]);
+            result.seventyFiveArray.push([ (parseInt(lineArray[2], 10)/1000 - baseTime), parseInt(lineArray[6], 10)]);
+            result.ninetyArray.push([ (parseInt(lineArray[2], 10)/1000 - baseTime), parseInt(lineArray[7], 10)]);
+        }
+
+
+        return result;
+    }
+    
+    
+    
 }());
