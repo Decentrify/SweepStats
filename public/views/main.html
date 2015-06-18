@@ -1,7 +1,60 @@
 <div class="container">
-	<h1> Welcome to the Main Landing Page.</h1>
 
-	<button class="btn btn-primary" click-directive>Upload CSV Data</button>
-	<input id="fileUploader" type="file" style="display:none" uploader/>
+    <div class="row">
+
+        <h1 class="text-center">Welcome to Sweep Simulations</h1>
+
+        <div class="big-top-buffer">
+
+            <div class="col-xs-6 col-xs-offset-3">
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">X Axis Information</div>
+                    <div class="panel-body">
+                        
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <input type="text" class="form-control" ng-model="mainController.container.xAxis.location"
+                                       placeholder="X Axis Parameter Location"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Y Axis Information</div>
+                    <div class="panel-body">
+                        
+                        <div class="row">
+                            
+                            <div class="col-xs-12">
+                                <input type="text" class="form-control" ng-model="mainController.container.yAxis.location"
+                                       placeholder="Y Axis Parameter Location (Comma Separated)"/>
+                            </div>
+                            
+                            <div class="col-xs-12 small-top-buffer">
+                                <input type="text" class="form-control" ng-model="mainController.container.yAxis.legends"
+                                       placeholder="Y Axis Parameter Legends (Comma Separated)"/>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+                <button class="btn btn-block btn-info" click-directive>Upload CSV Data</button>
+                <input id="fileUploader" type="file" style="display:none"  container = "mainController.container" uploader/>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
 
 </div>

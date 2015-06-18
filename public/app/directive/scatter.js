@@ -13,6 +13,9 @@
 		return {
 
 			restrict: 'A',
+            scope:{
+                container: "="
+            },
 			link: function(scope, element, attrs){
 				
 				element.bind('change', function(changeEvent){
@@ -26,25 +29,28 @@
 							data: loadEvent.target.result
 						};
 						
-						var result = analyzeDataAdvanced(csv.data);
-                        console.log(result);
+                        var xAxisLocation = scope.container.xAxis.location;
+                        var yAxisLocation = scope.container.yAxis.location.split(",");
                         
-                        if(result != null && !(result.length == 0)){
+						var result = analyzeDataAdvanced(xAxisLocation, yAxisLocation, csv.data);
+                        
+                        if(result != null && !(result.length == 0)) {
                             
+                            var array = scope.container.yAxis.legends.split(",");
                             
-                            var metadata = {
-                                
-                                overlay : 'gradient',
-                                gradientShuffle: 3000,
-                                croupierShuffle: 3000,
-                                maxExchangeCount: 25,
-                                controlPull: 3000,
-                                indexPull: 4000
+                            var legend = {
+                                firstArray : array[0],
+                                secondArray : array[1],
+                                thirdArray : array[2]
                             };
                             
+                            console.log("Result");
+                            console.log(result);
+                            
                             $cookies.putObject('data', result);
-                            $cookies.putObject('metadata', metadata);
-
+                            $cookies.putObject('metadata', scope.container.metadata);
+                            $cookies.putObject('legends', legend);
+                            
                             scope.$apply(function(){
                                 $location.path("/charts");  // Redirect to the display one.
                             });
@@ -89,7 +95,8 @@
 
 			restrict: 'E',
 			scope:{
-				data :'='
+				data :'=',
+                legends:'='
 			},
 
 			link: function(scope, elem, attrs){
@@ -102,7 +109,7 @@
                         zoomType: 'xy'
                     },
                     title: {
-                        text: 'Analyzing the 50%, 75% & 99%.'
+                        text: 'Sweep Evaluations'
                     },
                     subtitle: {
                         text: 'Sweep Scenarios'
@@ -155,21 +162,24 @@
                             }
                         }
                     },
-                    series: [{
-                        name: 'fifty',
-                        color: 'rgba(223, 83, 83, .5)',
-                        data: scope.data.fiftyArray
-
-                    }, {
-                        name: 'seventy five',
-                        color: 'rgba(119, 152, 191, .5)',
-                        data: scope.data.seventyFiveArray
-                    },
+                    series: [
                         {
-                            name: 'ninety nine',
+                            name: scope.legends.firstArray,
+                            color: 'rgba(223, 83, 83, .5)',
+                            data: scope.data.firstArray
+                        }, 
+                        {
+                            name: scope.legends.secondArray,
+                            color: 'rgba(119, 152, 191, .5)',
+                            data: scope.data.secondArray
+                        },
+                        
+                        {
+                            name: scope.legends.thirdArray,
                             color: 'rgba(99, 200, 138, 1)',
-                            data: scope.data.ninetyArray
-                    }]
+                            data: scope.data.thirdArray
+                        }
+                    ]
                 })
 
 			},
@@ -178,49 +188,31 @@
 		}		
 	}
 
-	
-	function analyzeData(data){
-
-		console.log("Call to analyze the data is made.");
-		var csvArray = data.split("\n");
-		
-		var lineArray = [];
-
-		var result = {
-
-			fiftyArray : [],
-			seventyFiveArray : [],
-			ninetyArray : []
-		};
-
-		for(var i =0, len= csvArray.length; i < len ; i ++){
-			
-			lineArray = csvArray[i].split(",");
-			result.fiftyArray.push([parseInt(lineArray[2], 10)/1000, parseInt(lineArray[5], 10)]);
-			result.seventyFiveArray.push([parseInt(lineArray[2], 10)/1000, parseInt(lineArray[6], 10)]);
-			result.ninetyArray.push([parseInt(lineArray[2], 10)/1000, parseInt(lineArray[7], 10)]);
-		}
-
-
-		return result;
-	}
 
 
 
-
-    function analyzeDataAdvanced(data){
+    function analyzeDataAdvanced (xAxisLocation , yAxisLocation, data){
 
         console.log(" Advanced Analysis of Data, start Time line from 0");
         
         var csvArray = data.split("\n");
-
         var lineArray = [];
 
+        var xLoc = parseInt(xAxisLocation);
+        var yLoc = [];
+        
+        for(var j =0, size = yAxisLocation.length; j < size ; j++){
+            yLoc.push(parseInt(yAxisLocation[j]));
+        }
+        
+        console.log("Y Loc Created ");
+        console.log(yLoc);
+        
         var result = {
-
-            fiftyArray : [],
-            seventyFiveArray : [],
-            ninetyArray : []
+            
+            firstArray : [],
+            secondArray : [],
+            thirdArray : []
         };
         
         var first = true;
@@ -229,12 +221,12 @@
             lineArray = csvArray[i].split(",");
             
             if(first){
-                var baseTime = ( parseInt(lineArray[2])/1000 -1 );
+                var baseTime = ( parseInt(lineArray[xLoc])/1000 -1 );
                 first = false;
             }
-            result.fiftyArray.push([ (parseInt(lineArray[2], 10)/1000 - baseTime), parseInt(lineArray[5], 10)]);
-            result.seventyFiveArray.push([ (parseInt(lineArray[2], 10)/1000 - baseTime), parseInt(lineArray[6], 10)]);
-            result.ninetyArray.push([ (parseInt(lineArray[2], 10)/1000 - baseTime), parseInt(lineArray[7], 10)]);
+            result.firstArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), parseInt(lineArray[yLoc[0]], 10)]);
+            result.secondArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), parseInt(lineArray[yLoc[1]], 10)]);
+            result.thirdArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), parseInt(lineArray[yLoc[2]], 10)]);
         }
 
 
