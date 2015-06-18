@@ -1,7 +1,7 @@
 'use strict';
 (function() {
     console.log('going to register the module');
-    var app = angular.module('stats', ['ngRoute']);
+    var app = angular.module('stats', ['ngRoute','ngCookies']);
 
     app.config(['$logProvider', '$routeProvider',
         function($logProvider, $routeProvider) {
@@ -18,7 +18,7 @@
                 .when('/charts', {
 
                     templateUrl: '/views/charts.html',
-                    controller: 'MainController',
+                    controller: 'ChartController',
                     controllerAs: 'chartController'
                 })
         }

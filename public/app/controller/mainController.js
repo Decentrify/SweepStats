@@ -3,12 +3,14 @@
 (function(){
 
 	angular.module('stats')
-		.controller('MainController',['$log', MainController]);
+		.controller('MainController',['$log', '$cookies', MainController]);
 
 
 	
-	function MainController($log){
+	function MainController($log, $cookies){
+        
 		$log.debug('Main Controller Initialized');
+        $cookies.remove('data');
 	}
 
 
