@@ -31,8 +31,9 @@
 						
                         var xAxisLocation = scope.container.xAxis.location;
                         var yAxisLocation = scope.container.yAxis.location.split(",");
-                        
-						var result = analyzeDataAdvanced(xAxisLocation, yAxisLocation, csv.data);
+                        var total = parseInt(scope.container.total);
+
+						var result = analyzeDataAdvanced(xAxisLocation, yAxisLocation, total, csv.data);
                         
                         if(result != null && !(result.length == 0)) {
                             
@@ -125,7 +126,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: 'Entries'
+                            text: 'Percentage Nodes'
                         }
                     },
                     legend: {
@@ -158,7 +159,7 @@
                             },
                             tooltip: {
                                 headerFormat: '<b>{series.name}</b><br>',
-                                pointFormat: '{point.x} s, {point.y} entries'
+                                pointFormat: '{point.x} s, {point.y} % nodes'
                             }
                         }
                     },
@@ -191,7 +192,7 @@
 
 
 
-    function analyzeDataAdvanced (xAxisLocation , yAxisLocation, data){
+    function analyzeDataAdvanced (xAxisLocation , yAxisLocation, total, data){
 
         console.log(" Advanced Analysis of Data, start Time line from 0");
         
@@ -224,9 +225,9 @@
                 var baseTime = ( parseInt(lineArray[xLoc])/1000 -1 );
                 first = false;
             }
-            result.firstArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), parseInt(lineArray[yLoc[0]], 10)]);
-            result.secondArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), parseInt(lineArray[yLoc[1]], 10)]);
-            result.thirdArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), parseInt(lineArray[yLoc[2]], 10)]);
+            result.firstArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), Math.floor((parseInt(lineArray[yLoc[0]], 10)) / total * 100)]);
+            result.secondArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), Math.floor((parseInt(lineArray[yLoc[1]], 10)) / total * 100)]);
+            result.thirdArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), Math.floor((parseInt(lineArray[yLoc[2]], 10)) / total * 100)]);
         }
 
 
