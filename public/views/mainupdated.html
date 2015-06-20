@@ -16,7 +16,6 @@
                     </div>
                     <div class="panel-body">
                         <input type="text" class="form-control" placeholder="Location in csv .. ">
-                        <input type="text" class="form-control small-top-buffer" placeholder="Color">
                     </div>
                     
                 </div>
@@ -27,9 +26,10 @@
                         <a ng-click="mainController.remove($index)"><i class="glyphicon glyphicon-remove pull-right text-muted"></i></a>
                     </div>
                     <div class="panel-body">
-                        <input type="text" class="form-control" placeholder="Location in csv .. ">
-                        <input type="text" class="form-control small-top-buffer" placeholder="Legend">
-                        <input type="text" class="form-control small-top-buffer" placeholder="Color">
+                        <input type="text" class="form-control" placeholder="Location in csv .. " ng-model="yData.location">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Legend" ng-model="yData.legend">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Color" ng-model="yData.color">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Max Value" ng-model="yData.maxValue">
                     </div>
                     
                 </div>
@@ -43,9 +43,10 @@
         
         <!-- Sidebar Options -->
         <div class="col-xs-3 col-xs-offset-1">
+            
             <div class="row">
-                
-
+                <h3 class="text-center">Options</h3>
+                <button type="button" class="btn btn-success btn-block medium-top-buffer" ng-click="mainController.addNewRow()">Add Y Axis Data</button>
             </div>
         </div>
         

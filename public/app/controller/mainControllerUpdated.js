@@ -21,24 +21,14 @@
             
             xAxis : {
                 location: null,
-                color: null
             },
             
             yAxis : [
                 {
                     location: null,
                     legend: null,
-                    color: null
-                },
-                {
-                    location: null,
-                    legend: null,
-                    color: null
-                },
-                {
-                    location: null,
-                    legend: null,
-                    color: null
+                    color: null,
+                    maxValue: null
                 }
             ],
             
@@ -56,6 +46,18 @@
         self.remove = function(index){
             $log.debug("Call to remove item at index: " + index);
             self.container.yAxis.splice(index, 1);
+        };
+        
+        
+        self.addNewRow = function(){
+          
+            $log.debug("Call to add new row to y axis data");
+            self.container.yAxis.push({
+                location: null,
+                legend: null,
+                color: null,
+                maxValue: null
+            })
         }
         
 	}
