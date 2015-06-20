@@ -1,0 +1,55 @@
+<div class="container">
+    
+    <div class="row">
+        
+        <div class="col-xs-6 col-xs-offset-2">
+            
+            <div class="row">
+                <h1 class="text-center">Sweep Simulations.</h1>
+            </div>
+
+            <div class="medium-top-buffer">
+                
+                <div class="panel panel-default">
+                    
+                    <div class="panel-heading">X Axis
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" class="form-control" placeholder="Location in csv .. ">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Color">
+                    </div>
+                    
+                </div>
+
+                <div class="panel panel-default" ng-repeat="yData in mainController.container.yAxis">
+                    
+                    <div class="panel-heading">Y Axis
+                        <a ng-click="mainController.remove($index)"><i class="glyphicon glyphicon-remove pull-right text-muted"></i></a>
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" class="form-control" placeholder="Location in csv .. ">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Legend">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Color">
+                    </div>
+                    
+                </div>
+                
+                <!-- Main Upload CSV Option. -->
+                <div class="btn btn-info btn-block small-bottom-buffer"> Upload CSV </div>
+                
+            </div>
+            
+        </div>
+        
+        <!-- Sidebar Options -->
+        <div class="col-xs-3 col-xs-offset-1">
+            <div class="row">
+                
+
+            </div>
+        </div>
+        
+    </div>
+
+    
+</div>
