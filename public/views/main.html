@@ -1,66 +1,58 @@
 <div class="container">
-
+    
     <div class="row">
+        
+        <div class="col-xs-6 col-xs-offset-2">
+            
+            <div class="row">
+                <h1 class="text-center">Sweep Simulations.</h1>
+            </div>
 
-        <h1 class="text-center">Welcome to Sweep Simulations</h1>
-
-        <div class="big-top-buffer">
-
-            <div class="col-xs-6 col-xs-offset-3">
-
+            <div class="medium-top-buffer">
+                
                 <div class="panel panel-default">
-
-                    <div class="panel-heading">X Axis Information</div>
-                    <div class="panel-body">
-                        
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <input type="text" class="form-control" ng-model="mainController.container.xAxis.location"
-                                       placeholder="X Axis Parameter Location"/>
-                            </div>
-                        </div>
-                        
+                    
+                    <div class="panel-heading">X Axis
                     </div>
-
-                </div>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">Y Axis Information</div>
                     <div class="panel-body">
-                        
-                        <div class="row">
-                            
-                            <div class="col-xs-12">
-                                <input type="text" class="form-control" ng-model="mainController.container.yAxis.location"
-                                       placeholder="Y Axis Parameter Location (Comma Separated)"/>
-                            </div>
-                            
-                            <div class="col-xs-12 small-top-buffer">
-                                <input type="text" class="form-control" ng-model="mainController.container.yAxis.legends"
-                                       placeholder="Y Axis Parameter Legends (Comma Separated)"/>
-                            </div>
-
-
-                            <div class="col-xs-12 small-top-buffer">
-                                <input type="text" class="form-control" ng-model="mainController.container.total"
-                                       placeholder="Total Nodes"/>
-                            </div>
-
-                        </div>
-
+                        <input type="text" class="form-control" placeholder="Location in csv .. " ng-model="mainController.container.xAxis.location">
                     </div>
                     
                 </div>
 
+                <div class="panel panel-default" ng-repeat="yData in mainController.container.yAxis">
+                    
+                    <div class="panel-heading">Y Axis
+                        <a ng-click="mainController.remove($index)"><i class="glyphicon glyphicon-remove pull-right text-muted"></i></a>
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" class="form-control" placeholder="Location in csv .. " ng-model="yData.location">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Legend" ng-model="yData.legend">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Color" ng-model="yData.color">
+                        <input type="text" class="form-control small-top-buffer" placeholder="Max Value" ng-model="yData.maxValue">
+                    </div>
+                    
+                </div>
+                
+                <!-- Main Upload CSV Option. -->
                 <button class="btn btn-block btn-info" click-directive>Upload CSV Data</button>
                 <input id="fileUploader" type="file" style="display:none"  container = "mainController.container" uploader/>
+                
             </div>
-
-
+            
         </div>
-
-
+        
+        <!-- Sidebar Options -->
+        <div class="col-xs-3 col-xs-offset-1">
+            
+            <div class="row">
+                <h3 class="text-center">Options</h3>
+                <button type="button" class="btn btn-success btn-block medium-top-buffer" ng-click="mainController.addNewRow()">Add Y Axis Data</button>
+                <button type="button" class="btn btn-warning btn-block medium-top-buffer" ng-click="mainController.lastChoice()">Load Last</button>
+            </div>
+        </div>
+        
     </div>
 
-
+    
 </div>

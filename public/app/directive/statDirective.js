@@ -40,8 +40,6 @@
 							data: loadEvent.target.result
 						};
                         
-                        console.log("In the uploader directive");
-                        
                         $cookies.putObject('lastChoice', scope.container);
                         analyzeData(scope.container, csv.data);
                         DataService.storeData(scope.container);
@@ -140,8 +138,8 @@
                         layout: 'vertical',
                         align: 'left',
                         verticalAlign: 'top',
-                        x: 100,
-                        y: 70,
+                        x: 470,
+                        y: 220,
                         floating: true,
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
                         borderWidth: 1

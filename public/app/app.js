@@ -10,8 +10,8 @@
             $routeProvider
                 .when("/", {
 
-                    templateUrl: '/views/mainupdated.html',
-                    controller: 'MainControllerUpdated',
+                    templateUrl: '/views/main.html',
+                    controller: 'MainController',
                     controllerAs: 'mainController'
 
                 })
