@@ -8,6 +8,16 @@
 		.directive('clickDirective', clickDirective)
 		.directive('uploader',['$location','$cookies', uploader]);
 
+
+    /**
+     * Initiate the file upload mechanism.
+     * Once the file is uploaded, simply analyze the data and 
+     * redirect it to the next page on successful upload.
+     * *
+     * @param $location
+     * @param $cookies
+     * @returns {{restrict: string, scope: {container: string}, link: link}}
+     */
 	function uploader($location, $cookies){
 
 		return {
@@ -28,38 +38,16 @@
 						var csv = {
 							data: loadEvent.target.result
 						};
-						
-                        var xAxisLocation = scope.container.xAxis.location;
-                        var yAxisLocation = scope.container.yAxis.location.split(",");
-                        var total = parseInt(scope.container.total);
+                        
+                        $cookies.putObject('lastChoice',scope.container);
+                        analyzeData(scope.container, csv.data);
+                        
+                        console.log(scope.container);
+                        $cookies.putObject('loadedData', scope.container);
 
-						var result = analyzeDataAdvanced(xAxisLocation, yAxisLocation, total, csv.data);
-                        
-                        if(result != null && !(result.length == 0)) {
-                            
-                            var array = scope.container.yAxis.legends.split(",");
-                            
-                            var legend = {
-                                firstArray : array[0],
-                                secondArray : array[1],
-                                thirdArray : array[2]
-                            };
-                            
-                            console.log("Result");
-                            console.log(result);
-                            
-                            $cookies.putObject('data', result);
-                            $cookies.putObject('metadata', scope.container.metadata);
-                            $cookies.putObject('legends', legend);
-                            
-                            scope.$apply(function(){
-                                $location.path("/charts");  // Redirect to the display one.
-                            });
-                        }
-                        
-                        else {
-                            $cookies.remove('data');
-                        }
+                        scope.$apply(function(){
+                            $location.path("/charts");  // Redirect to the display one.
+                        });
                         
 						element.val("");
 					};
@@ -72,36 +60,54 @@
 
 	}
 
-	function clickDirective(){
-
-		return {
-			restrict:'A',
-			link: function($scope, elem, attrs){
-
-				elem.bind('click', function(clickEvent){
-                    
-					var uploaderElem = angular.element(document.querySelector("#fileUploader"));
-					uploaderElem.trigger('click');
-				})
-			}
-		}
-
-	}
+	
 
 
 	function scatter(){
+        
 		console.log('Scatter Plot Directive');
 
+        /**
+         * Internal function to construct the series array for the
+         * data passed by the controller.
+         *  
+         * @param data
+         * @returns {Array}
+         * @private
+         */
+        function _constructSeriesArray(data){
+            
+            var seriesArray = [];
+
+            for(var i= 0, len = data.length; i < len; i++){
+                
+                var obj = {};
+                obj.name = data[i].legend;
+                obj.color = data[i].color;
+                obj.data = data[i].data;
+                
+                seriesArray.push(obj);
+            }
+            
+            return seriesArray;
+        }
+        
+        
+        //**************
+        // API EXPOSED
+        //**************
+        
 		return{
 
 			restrict: 'E',
 			scope:{
-				data :'=',
-                legends:'='
+				data :'='
 			},
 
 			link: function(scope, elem, attrs){
-
+                
+                var seriesArray = _constructSeriesArray(scope.data.yAxis);
+                
                 var chart = new Highcharts.Chart({
 
                     chart: {
@@ -163,24 +169,7 @@
                             }
                         }
                     },
-                    series: [
-                        {
-                            name: scope.legends.firstArray,
-                            color: 'rgba(223, 83, 83, .5)',
-                            data: scope.data.firstArray
-                        }, 
-                        {
-                            name: scope.legends.secondArray,
-                            color: 'rgba(119, 152, 191, .5)',
-                            data: scope.data.secondArray
-                        },
-                        
-                        {
-                            name: scope.legends.thirdArray,
-                            color: 'rgba(99, 200, 138, 1)',
-                            data: scope.data.thirdArray
-                        }
-                    ]
+                    series: seriesArray
                 })
 
 			},
@@ -190,48 +179,80 @@
 	}
 
 
+    /**
+     * Simply directive to relay the click to another hidden
+     * element in the system.
+     *
+     * @returns {{restrict: string, link: link}}
+     */
+    function clickDirective(){
 
+        return {
+            restrict:'A',
+            link: function($scope, elem, attrs){
 
-    function analyzeDataAdvanced (xAxisLocation , yAxisLocation, total, data){
+                elem.bind('click', function(clickEvent){
 
-        console.log(" Advanced Analysis of Data, start Time line from 0");
-        
-        var csvArray = data.split("\n");
-        var lineArray = [];
-
-        var xLoc = parseInt(xAxisLocation);
-        var yLoc = [];
-        
-        for(var j =0, size = yAxisLocation.length; j < size ; j++){
-            yLoc.push(parseInt(yAxisLocation[j]));
+                    var uploaderElem = angular.element(document.querySelector("#fileUploader"));
+                    uploaderElem.trigger('click');
+                })
+            }
         }
+
+    }
+    
+    
+    
+    /**
+     * Look at the container and then start analyzing the data 
+     * accordingly.
+     *
+     * @param container
+     * @param csvData
+     */
+    function analyzeData ( container, csvData ){
         
-        console.log("Y Loc Created ");
-        console.log(yLoc);
+        var xLoc = integerify (container.xAxis.location);
+        var yData = container.yAxis;
+
+        var csvLineArray = csvData.split("\n");  // Split the data in terms of lines first.
         
-        var result = {
-            
-            firstArray : [],
-            secondArray : [],
-            thirdArray : []
-        };
-        
+        // Start creating the data.
         var first = true;
-        for(var i =0, len= csvArray.length; i < len ; i ++){
+        for(var i= 0, len = csvLineArray.length; i<len; i++){
             
-            lineArray = csvArray[i].split(",");
+            if(csvLineArray[i]=="")
+                continue;
             
+            var lineArray = csvLineArray[i].split(",");
             if(first){
-                var baseTime = ( parseInt(lineArray[xLoc])/1000 -1 );
+                var baseTime = ((parseInt(lineArray[xLoc], 10)/1000) - 1);
                 first = false;
             }
-            result.firstArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), Math.floor((parseInt(lineArray[yLoc[0]], 10)) / total * 100)]);
-            result.secondArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), Math.floor((parseInt(lineArray[yLoc[1]], 10)) / total * 100)]);
-            result.thirdArray.push([ (parseInt(lineArray[xLoc], 10)/1000 - baseTime), Math.floor((parseInt(lineArray[yLoc[2]], 10)) / total * 100)]);
+            
+            for( var j= 0, size = yData.length; j< size; j++ ){
+                
+                var dataArray = (yData[j].data!= null) ? yData[j].data : [];
+                var yLoc = integerify(yData[j].location);
+                var yMaxVal = integerify(yData[j].maxValue);
+                
+                
+                dataArray.push([
+                    Math.floor(parseInt(lineArray[xLoc], 10)/1000 - baseTime),
+                    Math.floor(parseInt(lineArray[yLoc], 10)/ yMaxVal * 100)
+                ]);
+            }
         }
+        
+    }
 
 
-        return result;
+    /**
+     * Simply parseInt the value.
+     * @param data
+     */
+    function integerify(data){
+        return parseInt(data, 10);
     }
     
     

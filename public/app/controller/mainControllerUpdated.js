@@ -11,26 +11,16 @@
         
 		$log.debug('Updated Main Controller Initialized');
         
-        $cookies.remove('data');
-        $cookies.remove('metadata');
-        $cookies.remove('legends');
+        $cookies.remove('loadedData');
         
         var self = this;
-        
         self.container = {
             
             xAxis : {
-                location: null,
+                location: null
             },
             
-            yAxis : [
-                {
-                    location: null,
-                    legend: null,
-                    color: null,
-                    maxValue: null
-                }
-            ],
+            yAxis:[],
             
             metadata : {
                 overlay : 'gradient',
@@ -56,8 +46,16 @@
                 location: null,
                 legend: null,
                 color: null,
-                maxValue: null
+                maxValue: null,
+                data:[]
             })
+        };
+        
+        
+        self.lastChoice = function(){
+            
+            var lastChoice = $cookies.getObject('lastChoice');
+            self.container = lastChoice != null ? lastChoice : self.container;
         }
         
 	}

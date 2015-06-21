@@ -15,7 +15,7 @@
                     <div class="panel-heading">X Axis
                     </div>
                     <div class="panel-body">
-                        <input type="text" class="form-control" placeholder="Location in csv .. ">
+                        <input type="text" class="form-control" placeholder="Location in csv .. " ng-model="mainController.container.xAxis.location">
                     </div>
                     
                 </div>
@@ -35,7 +35,8 @@
                 </div>
                 
                 <!-- Main Upload CSV Option. -->
-                <div class="btn btn-info btn-block small-bottom-buffer"> Upload CSV </div>
+                <button class="btn btn-block btn-info" click-directive>Upload CSV Data</button>
+                <input id="fileUploader" type="file" style="display:none"  container = "mainController.container" uploader/>
                 
             </div>
             
@@ -47,6 +48,7 @@
             <div class="row">
                 <h3 class="text-center">Options</h3>
                 <button type="button" class="btn btn-success btn-block medium-top-buffer" ng-click="mainController.addNewRow()">Add Y Axis Data</button>
+                <button type="button" class="btn btn-warning btn-block medium-top-buffer" ng-click="mainController.lastChoice()">Load Last</button>
             </div>
         </div>
         
