@@ -56,6 +56,8 @@
             
             var lastChoice = $cookies.getObject('lastChoice');
             self.container = lastChoice != null ? lastChoice : self.container;
+            
+            console.log(self.container);
         }
         
 	}

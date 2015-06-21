@@ -6,19 +6,20 @@
         
 		.directive('sweepScatter', scatter)
 		.directive('clickDirective', clickDirective)
-		.directive('uploader',['$location','$cookies', uploader]);
+		.directive('uploader',['$location','$cookies','DataService', uploader]);
 
 
     /**
      * Initiate the file upload mechanism.
-     * Once the file is uploaded, simply analyze the data and 
+     * Once the file is uploaded, simply analyze the data and
      * redirect it to the next page on successful upload.
      * *
      * @param $location
      * @param $cookies
      * @returns {{restrict: string, scope: {container: string}, link: link}}
+     * @param DataService
      */
-	function uploader($location, $cookies){
+	function uploader($location, $cookies, DataService){
 
 		return {
 
@@ -39,12 +40,12 @@
 							data: loadEvent.target.result
 						};
                         
-                        $cookies.putObject('lastChoice',scope.container);
-                        analyzeData(scope.container, csv.data);
+                        console.log("In the uploader directive");
                         
-                        console.log(scope.container);
-                        $cookies.putObject('loadedData', scope.container);
-
+                        $cookies.putObject('lastChoice', scope.container);
+                        analyzeData(scope.container, csv.data);
+                        DataService.storeData(scope.container);
+                        
                         scope.$apply(function(){
                             $location.path("/charts");  // Redirect to the display one.
                         });
@@ -148,7 +149,7 @@
                     plotOptions: {
                         scatter: {
                             marker: {
-                                radius: 5,
+                                radius: 2,
                                 states: {
                                     hover: {
                                         enabled: true,
