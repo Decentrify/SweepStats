@@ -111,7 +111,7 @@
 
                     chart: {
                         type: 'scatter',
-                        renderTo: elem[0],
+                        renderTo: 'container',
                         zoomType: 'xy'
                     },
                     title: {
@@ -147,7 +147,7 @@
                     plotOptions: {
                         scatter: {
                             marker: {
-                                radius: 2,
+                                radius: 3,
                                 states: {
                                     hover: {
                                         enabled: true,
@@ -173,7 +173,7 @@
 
 			},
 
-			template: '<div id="container" style="margin 0 auto; width: 500px" class="medium-top-buffer"> Not Working </div>'
+			template: '<div id="container" style="height: 500px; width: 100%" class="medium-top-buffer"> Not Working </div>'
 		}		
 	}
 
