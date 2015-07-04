@@ -138,8 +138,8 @@
                         layout: 'vertical',
                         align: 'left',
                         verticalAlign: 'top',
-                        x: 470,
-                        y: 220,
+                        x: 500,
+                        y: 320,
                         floating: true,
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
                         borderWidth: 1
@@ -173,7 +173,7 @@
 
 			},
 
-			template: '<div id="container" style="height: 500px; width: 100%" class="medium-top-buffer"> Not Working </div>'
+			template: '<div id="container" style="height: 500px; width: 700px" class="medium-top-buffer"> Not Working </div>'
 		}		
 	}
 
