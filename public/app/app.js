@@ -21,6 +21,11 @@
                     controller: 'ChartController',
                     controllerAs: 'chartController'
                 })
+                .when('/avgLag', {
+                    templateUrl:'/views/systemLag.html',
+                    controller: 'ReplicationLagController',
+                    controllerAs: 'replicationLagController'
+                })
         }
     ])
 })();
