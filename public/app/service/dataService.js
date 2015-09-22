@@ -14,6 +14,10 @@
             info:[]
         };
 
+        var percentileJSONDump = {
+            info:[]
+        };
+
         return {
 
             storeData : function(data){
@@ -38,6 +42,17 @@
 
             retrieveJSONData: function(){
                 return jsonObj.info;
+            },
+
+
+            storePercentileJSONData : function(percentileJSONData){
+
+                $log.debug("Storing percentile json data");
+                percentileJSONDump.info = angular.fromJson(percentileJSONData);
+            },
+
+            retrievePercentileJSONData : function(){
+                return percentileJSONDump.info;
             }
             
         }

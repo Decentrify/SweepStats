@@ -8,8 +8,9 @@
         .directive('clickDirective', clickDirective)
         .directive('uploader', ['$location', '$cookies', 'DataService', uploader])
         .directive('jsonUploader', ['DataService', jsonUploader])
-        .directive('replicationLag', ['$log', replicationLag]);
-
+        .directive('percentileJsonUploader',['DataService', percentileUploader])
+        .directive('replicationLag', ['$log', replicationLag])
+        .directive('percentileLag', ['$log', percentileLag]);
 
     /**
      * Main directive for the replication lag display.
@@ -31,7 +32,7 @@
                 var chart = new Highcharts.Chart({
 
                     chart: {
-                        renderTo: 'replicationLagContainer',
+                        renderTo: 'replicationLagContainer'
                     },
 
                     title: {
@@ -87,9 +88,161 @@
 
             },
 
-            template: '<div id="replicationLagContainer" style="height: 500px; width: 700px" class="medium-top-buffer"> Not Working </div>'
+            template: '<div id="replicationLagContainer" style="height: 500px; width: 980px" class="medium-top-buffer"> Not Working </div>'
         }
     }
+
+
+
+    /**
+     * Main directive for the replication lag display.
+     * @param $log
+     * @returns {{restrict: string, scope: {data: string}, link: Function, template: string}}
+     */
+    function percentileLag($log) {
+
+        return {
+
+            restrict: 'E',
+            scope: {
+                container: '='
+            },
+
+
+            link: function (scope, elem, attrs) {
+
+                var chart = new Highcharts.Chart({
+
+                    chart: {
+                        renderTo: 'percentileReplicationLagContainer'
+                    },
+
+                    title: {
+                        text: 'Replication Lag'
+                    },
+
+                    xAxis: {
+                        type: 'linear'
+                        //units:[['millisecond', null]]
+                    },
+
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+
+                    tooltip: {
+                        crosshairs: true,
+                        shared: true,
+                        valueSuffix: ''
+                    },
+
+                    legend: {},
+
+                    series: [{
+                        name: 'Fifty Percentile Lag',
+                        data: scope.container.fifty,
+                        zIndex: 1,
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        }
+                    },
+
+                        {
+                            name: 'Seventy Five Percentile Lag',
+                            data: scope.container.seventyFive,
+                            zIndex: 1,
+                            marker: {
+                                fillColor: 'white',
+                                lineWidth: 2,
+                                lineColor: Highcharts.getOptions().colors[1]
+                            }
+                        },
+
+                        {
+                            name: 'Ninety Percentile Lag',
+                            data: scope.container.ninety,
+                            zIndex: 1,
+                            marker: {
+                                fillColor: 'white',
+                                lineWidth: 2,
+                                lineColor: Highcharts.getOptions().colors[2]
+                            }
+                        }
+
+
+
+                        //{
+                        //    name: 'Average Lag',
+                        //    data: scope.container.ranges,
+                        //    type: 'arearange',
+                        //    lineWidth: 0,
+                        //    linkedTo: ':previous',
+                        //    color: Highcharts.getOptions().colors[0],
+                        //    fillOpacity: 0.3,
+                        //    zIndex: 0
+                        //}
+                    ]
+                });
+
+                scope.$watch("container", function (newValue) {
+                    chart.series[0].setData(newValue.fifty, true);
+                    chart.series[1].setData(newValue.seventyFive, true);
+                    chart.series[2].setData(newValue.ninety, true);
+                }, true);
+
+            },
+
+            template: '<div id="percentileReplicationLagContainer" style="height: 500px; width: 980px" class="medium-top-buffer"> Not Working </div>'
+        }
+    }
+
+
+
+    function percentileUploader(DataService) {
+
+        return {
+
+            restrict: 'A',
+            scope: {
+                container: "="
+            },
+
+            link: function (scope, element, attrs) {
+
+                element.bind('change', function (changeEvent) {
+
+
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+
+                        var json = {
+                            data: loadEvent.target.result
+                        };
+
+                        scope.$apply(function(){
+
+                            console.log("Going to store the percentile JSONDump.");
+                            DataService.storePercentileJSONData(json.data);
+                            element.val("");
+                        })
+
+                    };
+
+                    reader.readAsText(changeEvent.target.files[0]);
+                })
+            }
+        }
+
+    }
+
+
+
+
+
 
 
     function jsonUploader(DataService) {

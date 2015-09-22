@@ -26,6 +26,11 @@
                     controller: 'ReplicationLagController',
                     controllerAs: 'replicationLagController'
                 })
+                .when('/perLag', {
+                    templateUrl:'/views/percentileReplicationLag.html',
+                    controller: 'PercentileLagController',
+                    controllerAs: 'percentileLagController'
+                })
         }
     ])
 })();
