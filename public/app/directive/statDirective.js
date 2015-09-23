@@ -36,18 +36,30 @@
                     },
 
                     title: {
-                        text: 'Replication Lag'
+                        text: 'Average Entry Replication Lag'
                     },
 
                     xAxis: {
-                        type: 'linear'
-                        //units:[['millisecond', null]]
+                        type: 'linear',
+                        title:{
+                            text: 'Time(sec)'
+                        }
                     },
 
                     yAxis: {
                         title: {
-                            text: null
+                            text: 'Number of Entries'
                         }
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'left',
+                        verticalAlign: 'top',
+                        x: 40,
+                        y: 80,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                        borderWidth: 1
                     },
 
                     tooltip: {
@@ -56,10 +68,8 @@
                         valueSuffix: ''
                     },
 
-                    legend: {},
-
                     series: [{
-                        name: 'Time',
+                        name: 'Average Lag',
                         data: scope.container.data,
                         zIndex: 1,
                         marker: {
@@ -69,7 +79,7 @@
                         }
                     },
                         {
-                            name: 'Average Lag',
+                            name: 'Entry Lag Range',
                             data: scope.container.ranges,
                             type: 'arearange',
                             lineWidth: 0,
@@ -118,27 +128,38 @@
                     },
 
                     title: {
-                        text: 'Replication Lag'
+                        text: 'Entry Replication Lag'
                     },
 
                     xAxis: {
-                        type: 'linear'
-                        //units:[['millisecond', null]]
+                        type: 'linear',
+                        title:{
+                            text: 'Time(sec)'
+                        }
                     },
 
                     yAxis: {
                         title: {
-                            text: null
+                            text: 'Number of Entries'
                         }
                     },
 
                     tooltip: {
                         crosshairs: true,
                         shared: true,
-                        valueSuffix: ''
+                        valueSuffix: ' entries'
                     },
 
-                    legend: {},
+                    legend: {
+                        layout: 'vertical',
+                        align: 'left',
+                        verticalAlign: 'top',
+                        x: 40,
+                        y: 80,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                        borderWidth: 1
+                    },
 
                     series: [{
                         name: 'Fifty Percentile Lag',
@@ -172,19 +193,6 @@
                                 lineColor: Highcharts.getOptions().colors[2]
                             }
                         }
-
-
-
-                        //{
-                        //    name: 'Average Lag',
-                        //    data: scope.container.ranges,
-                        //    type: 'arearange',
-                        //    lineWidth: 0,
-                        //    linkedTo: ':previous',
-                        //    color: Highcharts.getOptions().colors[0],
-                        //    fillOpacity: 0.3,
-                        //    zIndex: 0
-                        //}
                     ]
                 });
 
